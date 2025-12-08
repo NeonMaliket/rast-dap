@@ -1,0 +1,11 @@
+[package]
+name = "rust-dap-adapter"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rust-dap-adapter"
+path = "src/main.rs"
+
+[dependencies]
+dap = "0.4.1-alpha1"
