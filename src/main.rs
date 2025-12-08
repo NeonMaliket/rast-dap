@@ -54,8 +54,6 @@ fn main() -> DynResult<()> {
             }
             Command::SetBreakpoints(args) => {
                 dap_log(&mut server, format!("SetBreakpoints: {args:?}"));
-                dap_log(&mut server, "SetBreakpoints........");
-
                 let mut breakpoints = Vec::new();
                 if let Some(source_breakpoints) = &args.breakpoints {
                     for (i, src_bp) in source_breakpoints.iter().enumerate() {
@@ -88,7 +86,6 @@ fn main() -> DynResult<()> {
             }
             _ => {
                 dap_log(&mut server, format!("Unhandled command: {:?}", req.command));
-                // Для неизвестных команд возвращаем базовый ответ
                 server.respond(req.success(ResponseBody::Launch))?;
                 Ok(())
             }
