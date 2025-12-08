@@ -64,7 +64,7 @@ fn main() -> DynResult<()> {
                             verified: true,
                             message: None,
                             source: Some(args.source.clone()),
-                            line: Some(src_bp.line + 1),
+                            line: Some(src_bp.line),
                             column: src_bp.column,
                             end_line: None,
                             end_column: None,
