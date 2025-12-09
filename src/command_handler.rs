@@ -9,10 +9,11 @@ use dap::responses::{
     ResponseBody, SetBreakpointsResponse, SetExceptionBreakpointsResponse, ThreadsResponse,
 };
 use dap::server::Server;
-use dap::types::{Breakpoint, Capabilities, Thread};
+use dap::types::{Breakpoint, Thread};
 
 use crate::log::dap_log;
 use crate::types::DynResult;
+use crate::utils::extract_port_from_args;
 
 pub(crate) fn handle(req: Request, server: &mut Server<Stdin, Stdout>) -> DynResult<()> {
     match &req.command {
@@ -35,7 +36,7 @@ fn handle_initialize(
     server: &mut Server<Stdin, Stdout>,
 ) -> DynResult<()> {
     dap_log(server, format!("Initialize: {args:?}"));
-    let rsp = req.success(ResponseBody::Initialize(Capabilities::default()));
+    let rsp = req.success(ResponseBody::ConfigurationDone);
     server.respond(rsp)?;
     server.send_event(Event::Initialized)?;
     Ok(())
@@ -47,6 +48,9 @@ fn handle_launch(
     server: &mut Server<Stdin, Stdout>,
 ) -> DynResult<()> {
     dap_log(server, format!("Launch: {args:?}"));
+    let port = extract_port_from_args(args);
+
+    dap_log(server, format!("Running on port: {port:?}"));
     server.respond(req.success(ResponseBody::Launch))?;
     Ok(())
 }

@@ -9,3 +9,4 @@ path = "src/main.rs"
 
 [dependencies]
 dap = "0.4.1-alpha1"
+serde_json = "1.0.145"

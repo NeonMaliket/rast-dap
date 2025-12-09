@@ -1,6 +1,7 @@
 mod command_handler;
 mod log;
 mod types;
+mod utils;
 use crate::command_handler::handle;
 use crate::log::dap_log;
 use crate::types::DynResult;
@@ -20,11 +21,6 @@ fn main() -> DynResult<()> {
                 break;
             }
         };
-
-        dap_log(
-            &mut server,
-            format!("Processing command: {:?}", req.command),
-        );
 
         let result: DynResult<()> = handle(req, &mut server);
 
