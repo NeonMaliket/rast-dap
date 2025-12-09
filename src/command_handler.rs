@@ -3,7 +3,8 @@ use std::io::{Stdin, Stdout};
 use dap::events::Event;
 use dap::requests::{
     AttachRequestArguments, Command, DisconnectArguments, InitializeArguments,
-    LaunchRequestArguments, Request, SetBreakpointsArguments, SetExceptionBreakpointsArguments,
+    LaunchRequestArguments, Request, RestartArguments, SetBreakpointsArguments,
+    SetExceptionBreakpointsArguments,
 };
 use dap::responses::{
     ResponseBody, SetBreakpointsResponse, SetExceptionBreakpointsResponse, ThreadsResponse,
@@ -19,6 +20,7 @@ pub(crate) fn handle(req: Request, server: &mut Server<Stdin, Stdout>) -> DynRes
     match &req.command {
         Command::Initialize(args) => handle_initialize(req.clone(), args, server),
         Command::Launch(args) => handle_launch(req.clone(), args, server),
+        Command::Restart(args) => handle_restart(req.clone(), args, server),
         Command::Attach(args) => handle_attach(req.clone(), args, server),
         Command::SetBreakpoints(args) => handle_set_breakpoints(req.clone(), args, server),
         Command::SetExceptionBreakpoints(args) => {
@@ -52,6 +54,16 @@ fn handle_launch(
 
     dap_log(server, format!("Running on port: {port:?}"));
     server.respond(req.success(ResponseBody::Launch))?;
+    Ok(())
+}
+
+fn handle_restart(
+    req: Request,
+    args: &RestartArguments,
+    server: &mut Server<Stdin, Stdout>,
+) -> DynResult<()> {
+    dap_log(server, format!("Restart: {args:?}"));
+    server.respond(req.success(ResponseBody::Restart))?;
     Ok(())
 }
 
